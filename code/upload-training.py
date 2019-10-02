@@ -15,7 +15,7 @@ for root, dirs, files in os.walk(pathToAnnotations, topdown=False):
         jsonData = annotation.read()
         jsonDict = json.loads(jsonData)
         jsonDict[0]["name"] = "car"
-        jsonData = jsonDict.dumps()
+        jsonData = json.dumps(jsonDict)
         url = 'https://app.nanonets.com/api/v2/ObjectDetection/Model/' + model_id + '/UploadFile/'
         data = {'file' :open(imagePath, 'rb'),  'data' :('', '[{"filename":"' + imageName+".jpg" + '", "object": '+ jsonData+'}]'),   'modelId' :('', model_id)}       
         response = requests.post(url, auth=requests.auth.HTTPBasicAuth(api_key, ''), files=data)
