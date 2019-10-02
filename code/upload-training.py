@@ -12,7 +12,10 @@ for root, dirs, files in os.walk(pathToAnnotations, topdown=False):
         filePath = os.path.join(root, name)
         imageName, ext = name.split(".")
         imagePath = os.path.join(pathToImages, imageName + '.jpg')
-        jsonData = annotation.read().replace(" ","")
+        #jsonData = annotation.read().replace(" ","")
+        jsonDict = jsonData.loads()
+        jsonDict[0]["name"] = "car"
+        jsonData = jsonDict.dumps()
         url = 'https://app.nanonets.com/api/v2/ObjectDetection/Model/' + model_id + '/UploadFile/'
         data = {'file' :open(imagePath, 'rb'),  'data' :('', '[{"filename":"' + imageName+".jpg" + '", "object": '+ jsonData+'}]'),   'modelId' :('', model_id)}       
         response = requests.post(url, auth=requests.auth.HTTPBasicAuth(api_key, ''), files=data)
